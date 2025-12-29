@@ -1,0 +1,110 @@
+{
+  "metadata": {
+    "title": "FAA 주식 선택 계산기",
+    "description": "최고 수익 자산을 선택하는 유연한 자산 배분 전략"
+  },
+  "page": {
+    "title": "FAA 주식 선택 계산기",
+    "description": "최고 수익 자산을 선택하는 유연한 자산 배분 전략"
+  },
+  "assetSelector": {
+    "title": "자산 선택",
+    "description": "FAA 전략으로 분석할 7개의 ETF/주식 티커를 입력하세요",
+    "assetLabel": "자산 {number}",
+    "placeholder": {
+      "1": "예: VTI",
+      "2": "예: VEA",
+      "3": "예: VWO",
+      "4": "예: SHY",
+      "5": "예: BND",
+      "6": "예: GSG",
+      "7": "예: VNQ"
+    },
+    "includeUSD": "비교를 위해 USD(현금)를 8번째 자산으로 포함",
+    "calculateButton": "FAA 점수 계산",
+    "calculating": "계산 중...",
+    "errors": {
+      "exactlySevenRequired": "정확히 7개의 티커가 필요합니다",
+      "allTickersRequired": "7개의 티커를 모두 입력해야 합니다",
+      "fetchFailed": "데이터를 가져오지 못했습니다: {tickers}",
+      "insufficientData": "충분한 과거 데이터가 없습니다: {tickers}",
+      "unknownError": "알 수 없는 오류가 발생했습니다"
+    }
+  },
+  "metricsTable": {
+    "title": "자산 지표",
+    "headers": {
+      "ticker": "티커",
+      "momentum": "모멘텀",
+      "volatility": "변동성",
+      "correlation": "상관관계",
+      "weightedScore": "가중 점수"
+    }
+  },
+  "correlationMatrix": {
+    "title": "상관관계 행렬",
+    "description": "자산 간 쌍별 상관계수 (일일 수익률)",
+    "headers": {
+      "asset": "자산"
+    },
+    "legend": {
+      "title": "색상 범례:",
+      "strongPositive": "강한 양의 상관관계 (≥0.7)",
+      "moderatePositive": "중간 양의 상관관계 (0.4-0.7)",
+      "weakNone": "약함/없음 (-0.1-0.1)",
+      "moderateNegative": "중간 음의 상관관계 (-0.7--0.4)",
+      "strongNegative": "강한 음의 상관관계 (≤-0.7)",
+      "note": "참고: 대각선 값은 항상 1.0입니다 (자산과 자기 자신의 상관관계)"
+    }
+  },
+  "selectedAssets": {
+    "title": "상위 3개 선택 자산",
+    "description": "가중 FAA 점수를 기반으로 선택된 자산",
+    "score": "점수: {value}",
+    "allocation": "배분 전략: 선택된 자산 전체에 동일 가중치 분배. 음의 모멘텀을 가진 자산은 현금 보유로 대체됩니다.",
+    "negativeMomentum": {
+      "multiple": "{count}개의 자산이 음의 모멘텀을 가지고 있으며 현금으로 배분됩니다: {tickers}",
+      "single": "1개의 자산이 음의 모멘텀을 가지고 있으며 현금으로 배분됩니다: {ticker}",
+      "all": "선택된 모든 자산이 음의 모멘텀을 가지고 있어 현금으로 배분됩니다. 주식 매수가 필요하지 않습니다."
+    },
+    "emptyState": "위에서 7개의 ETF/주식 티커를 입력하고 계산을 클릭하여 시작하세요"
+  },
+  "purchaseCalculator": {
+    "title": "매수 계산기",
+    "description": "투자 금액으로 구매할 수 있는 주식 수를 계산합니다",
+    "currency": "통화",
+    "usd": "USD",
+    "krw": "KRW",
+    "investmentAmount": "투자 금액",
+    "placeholderUSD": "10000",
+    "placeholderKRW": "13500000",
+    "calculateButton": "계산",
+    "calculating": "계산 중...",
+    "exchangeRate": "환율: 1 USD = {rate} KRW",
+    "updated": "업데이트: {date}",
+    "originalAmount": "원본 금액: ₩{krw} KRW = ${usd} USD",
+    "headers": {
+      "asset": "자산",
+      "currentPrice": "현재 가격",
+      "shares": "주식 수",
+      "usdAmount": "USD 금액",
+      "percentage": "%",
+      "total": "합계"
+    },
+    "errors": {
+      "atLeastOneTicker": "최소 1개의 티커가 필요합니다",
+      "noPriceData": "가격 데이터를 사용할 수 없습니다",
+      "fetchFailed": "모든 티커에 대한 시세를 가져오지 못했습니다"
+    }
+  },
+  "api": {
+    "errors": {
+      "exchangeRate": {
+        "apiError": "환율 API 오류: {status}",
+        "krwNotFound": "응답에서 KRW 환율을 찾을 수 없습니다",
+        "fetchFailed": "환율을 가져오지 못했습니다",
+        "internalError": "내부 서버 오류"
+      }
+    }
+  }
+}

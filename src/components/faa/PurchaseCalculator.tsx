@@ -20,12 +20,14 @@ import { DollarSign, Info } from 'lucide-react'
 import { fetchStockQuotes } from '@/lib/api-client/stock-data'
 import { fetchExchangeRate } from '@/lib/api-client/exchange-rate'
 import type { SelectedAsset, Currency, PurchaseAllocation } from '@/types/faa'
+import { useTranslations } from 'next-intl'
 
 interface PurchaseCalculatorProps {
   selectedAssets: SelectedAsset[]
 }
 
 export function PurchaseCalculator({ selectedAssets }: PurchaseCalculatorProps) {
+  const t = useTranslations('purchaseCalculator')
   const [currency, setCurrency] = useState<Currency>('USD')
   const [amount, setAmount] = useState<string>('')
   const [exchangeRate, setExchangeRate] = useState<number | null>(null)
@@ -125,14 +127,13 @@ export function PurchaseCalculator({ selectedAssets }: PurchaseCalculatorProps) 
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Purchase Calculator</CardTitle>
+          <CardTitle>{t('title')}</CardTitle>
         </CardHeader>
         <CardContent>
           <Alert>
             <Info className="h-4 w-4" />
             <AlertDescription>
-              All selected assets have negative momentum and are allocated to CASH.
-              No stock purchases needed.
+              {t('negativeMomentum.all')}
             </AlertDescription>
           </Alert>
         </CardContent>
@@ -145,36 +146,36 @@ export function PurchaseCalculator({ selectedAssets }: PurchaseCalculatorProps) 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Purchase Calculator</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
         <CardDescription>
-          Calculate how many shares you can buy with your investment amount
+          {t('description')}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Currency and Amount Input */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="space-y-2">
-            <Label>Currency</Label>
+            <Label>{t('currency')}</Label>
             <div className="flex gap-2">
               <Button
                 variant={currency === 'USD' ? 'default' : 'outline'}
                 onClick={() => setCurrency('USD')}
                 className="flex-1"
               >
-                USD
+                {t('usd')}
               </Button>
               <Button
                 variant={currency === 'KRW' ? 'default' : 'outline'}
                 onClick={() => setCurrency('KRW')}
                 className="flex-1"
               >
-                KRW
+                {t('krw')}
               </Button>
             </div>
           </div>
 
           <div className="space-y-2 sm:col-span-2">
-            <Label htmlFor="amount">Investment Amount</Label>
+            <Label htmlFor="amount">{t('investmentAmount')}</Label>
             <div className="flex gap-2">
               <div className="relative flex-1">
                 <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -183,7 +184,7 @@ export function PurchaseCalculator({ selectedAssets }: PurchaseCalculatorProps) 
                   type="number"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  placeholder={currency === 'USD' ? '10000' : '13500000'}
+                  placeholder={currency === 'USD' ? t('placeholderUSD') : t('placeholderKRW')}
                   className="pl-9"
                   min="0"
                   step="any"
@@ -193,7 +194,7 @@ export function PurchaseCalculator({ selectedAssets }: PurchaseCalculatorProps) 
                 onClick={handleCalculate}
                 disabled={!canCalculate || isLoading}
               >
-                {isLoading ? 'Calculating...' : 'Calculate'}
+                {isLoading ? t('calculating') : t('calculateButton')}
               </Button>
             </div>
           </div>
@@ -204,10 +205,10 @@ export function PurchaseCalculator({ selectedAssets }: PurchaseCalculatorProps) 
           <Alert>
             <Info className="h-4 w-4" />
             <AlertDescription>
-              Exchange Rate: 1 USD = {exchangeRate.toFixed(2)} KRW
+              {t('exchangeRate', { rate: exchangeRate.toFixed(2) })}
               <br />
               <span className="text-xs text-muted-foreground">
-                Updated: {new Date(exchangeTimestamp).toLocaleString()}
+                {t('updated', { date: new Date(exchangeTimestamp).toLocaleString() })}
               </span>
             </AlertDescription>
           </Alert>
@@ -236,11 +237,11 @@ export function PurchaseCalculator({ selectedAssets }: PurchaseCalculatorProps) 
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Asset</TableHead>
-                    <TableHead className="text-right">Current Price</TableHead>
-                    <TableHead className="text-right">Shares</TableHead>
-                    <TableHead className="text-right">USD Amount</TableHead>
-                    <TableHead className="text-right">%</TableHead>
+                    <TableHead>{t('headers.asset')}</TableHead>
+                    <TableHead className="text-right">{t('headers.currentPrice')}</TableHead>
+                    <TableHead className="text-right">{t('headers.shares')}</TableHead>
+                    <TableHead className="text-right">{t('headers.usdAmount')}</TableHead>
+                    <TableHead className="text-right">{t('headers.percentage')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -264,7 +265,7 @@ export function PurchaseCalculator({ selectedAssets }: PurchaseCalculatorProps) 
                     </TableRow>
                   ))}
                   <TableRow className="font-semibold bg-muted/50">
-                    <TableCell colSpan={3}>Total</TableCell>
+                    <TableCell colSpan={3}>{t('headers.total')}</TableCell>
                     <TableCell className="text-right">
                       ${totalUSD.toFixed(2)}
                     </TableCell>
@@ -276,8 +277,10 @@ export function PurchaseCalculator({ selectedAssets }: PurchaseCalculatorProps) 
 
             {currency === 'KRW' && exchangeRate && (
               <div className="text-sm text-muted-foreground">
-                <strong>Original Amount:</strong> ₩{parseFloat(amount).toLocaleString()} KRW
-                = ${(parseFloat(amount) / exchangeRate).toFixed(2)} USD
+                {t('originalAmount', {
+                  krw: parseFloat(amount).toLocaleString(),
+                  usd: (parseFloat(amount) / exchangeRate).toFixed(2)
+                })}
               </div>
             )}
           </div>

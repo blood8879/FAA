@@ -5,25 +5,29 @@ import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { AlertCircle } from 'lucide-react'
 import type { SelectedAsset } from '@/types/faa'
+import { useTranslations } from 'next-intl'
 
 interface SelectedAssetsProps {
   selectedAssets: SelectedAsset[]
 }
 
 export function SelectedAssets({ selectedAssets }: SelectedAssetsProps) {
+  const t = useTranslations('selectedAssets')
+
   if (selectedAssets.length === 0) {
     return null
   }
 
   const cashAllocations = selectedAssets.filter((a) => a.allocation === 'CASH')
   const hasCashAllocations = cashAllocations.length > 0
+  const tickers = cashAllocations.map((a) => a.ticker).join(', ')
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Top 3 Selected Assets</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
         <CardDescription>
-          Assets selected based on weighted FAA scores
+          {t('description')}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -32,10 +36,8 @@ export function SelectedAssets({ selectedAssets }: SelectedAssetsProps) {
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
               {cashAllocations.length === 1
-                ? 'One asset has'
-                : `${cashAllocations.length} assets have`}{' '}
-              negative momentum and will be allocated to CASH:{' '}
-              {cashAllocations.map((a) => a.ticker).join(', ')}
+                ? t('negativeMomentum.single', { ticker: tickers })
+                : t('negativeMomentum.multiple', { count: cashAllocations.length, tickers })}
             </AlertDescription>
           </Alert>
         )}
@@ -53,7 +55,7 @@ export function SelectedAssets({ selectedAssets }: SelectedAssetsProps) {
                 <div>
                   <div className="font-semibold text-lg">{asset.ticker}</div>
                   <div className="text-sm text-muted-foreground">
-                    Score: {asset.metrics.weightedScore.toFixed(4)}
+                    {t('score', { value: asset.metrics.weightedScore.toFixed(4) })}
                   </div>
                 </div>
               </div>
@@ -70,9 +72,7 @@ export function SelectedAssets({ selectedAssets }: SelectedAssetsProps) {
 
         <div className="pt-4 border-t">
           <div className="text-sm text-muted-foreground">
-            <strong>Allocation Strategy:</strong> Equal weight distribution
-            across selected assets. Assets with negative momentum are replaced
-            with cash holdings.
+            {t('allocation')}
           </div>
         </div>
       </CardContent>

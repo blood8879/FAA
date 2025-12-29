@@ -8,8 +8,11 @@ import { SelectedAssets } from '@/components/faa/SelectedAssets'
 import { PurchaseCalculator } from '@/components/faa/PurchaseCalculator'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { AlertCircle } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 export default function Home() {
+  const t = useTranslations('page')
+  const tEmpty = useTranslations('selectedAssets')
   const { metrics, selectedAssets, correlationMatrix, tickers, isLoading, error, calculate } = useFAACalculator()
 
   const handleCalculate = (tickers: string[], includeUSD: boolean) => {
@@ -22,10 +25,10 @@ export default function Home() {
         {/* Header */}
         <div className="space-y-2">
           <h1 className="text-4xl font-bold tracking-tight">
-            FAA Stock Selection Calculator
+            {t('title')}
           </h1>
           <p className="text-lg text-muted-foreground">
-            Flexible Asset Allocation strategy for selecting top-performing assets
+            {t('description')}
           </p>
         </div>
 
@@ -56,7 +59,7 @@ export default function Home() {
         {metrics.length === 0 && !error && !isLoading && (
           <div className="text-center py-12 text-muted-foreground">
             <p className="text-lg">
-              Enter 7 ETF/stock tickers above and click Calculate to get started
+              {tEmpty('emptyState')}
             </p>
           </div>
         )}

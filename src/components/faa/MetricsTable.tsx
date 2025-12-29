@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/table'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { AssetMetrics } from '@/types/faa'
+import { useTranslations } from 'next-intl'
 
 interface MetricsTableProps {
   metrics: AssetMetrics[]
@@ -24,6 +25,8 @@ function formatNumber(value: number): string {
 }
 
 export function MetricsTable({ metrics }: MetricsTableProps) {
+  const t = useTranslations('metricsTable')
+
   if (metrics.length === 0) {
     return null
   }
@@ -36,19 +39,19 @@ export function MetricsTable({ metrics }: MetricsTableProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Asset Metrics</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Ticker</TableHead>
-                <TableHead className="text-right">Momentum</TableHead>
-                <TableHead className="text-right">Volatility</TableHead>
-                <TableHead className="text-right">Correlation</TableHead>
+                <TableHead>{t('headers.ticker')}</TableHead>
+                <TableHead className="text-right">{t('headers.momentum')}</TableHead>
+                <TableHead className="text-right">{t('headers.volatility')}</TableHead>
+                <TableHead className="text-right">{t('headers.correlation')}</TableHead>
                 <TableHead className="text-right font-semibold">
-                  Weighted Score
+                  {t('headers.weightedScore')}
                 </TableHead>
               </TableRow>
             </TableHeader>
