@@ -9,16 +9,23 @@
   },
   "assetSelector": {
     "title": "Asset Selection",
-    "description": "Enter 7 ETF/stock tickers to analyze with FAA strategy",
+    "description": "Select 7 ETFs to analyze with FAA strategy",
     "assetLabel": "Asset {number}",
     "placeholder": {
-      "1": "e.g., VTI",
-      "2": "e.g., VEA",
-      "3": "e.g., VWO",
-      "4": "e.g., SHY",
-      "5": "e.g., BND",
-      "6": "e.g., GSG",
-      "7": "e.g., VNQ"
+      "1": "Select Equity",
+      "2": "Select Equity",
+      "3": "Select Equity",
+      "4": "Select Bond",
+      "5": "Select Bond",
+      "6": "Select Alternative",
+      "7": "Select Alternative"
+    },
+    "guide": {
+      "title": "📌 Portfolio Guide (Recommended)",
+      "equity": "Equity (Offense)",
+      "bond": "Fixed Income (Defense)",
+      "alternative": "Alternatives (Inflation Hedge)",
+      "items": " assets"
     },
     "includeUSD": "Include USD (Cash) as 8th asset for comparison",
     "calculateButton": "Calculate FAA Scores",
