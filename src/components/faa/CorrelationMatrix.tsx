@@ -9,6 +9,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useTranslations } from 'next-intl'
 
 interface CorrelationMatrixProps {
   matrix: number[][]
@@ -27,6 +28,8 @@ function getCorrelationColor(value: number): string {
 }
 
 export function CorrelationMatrix({ matrix, tickers }: CorrelationMatrixProps) {
+  const t = useTranslations('correlationMatrix')
+
   if (matrix.length === 0 || tickers.length === 0) {
     return null
   }
@@ -34,9 +37,9 @@ export function CorrelationMatrix({ matrix, tickers }: CorrelationMatrixProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Correlation Matrix</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
         <CardDescription>
-          Pairwise correlation coefficients between assets (daily returns)
+          {t('description')}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -44,7 +47,7 @@ export function CorrelationMatrix({ matrix, tickers }: CorrelationMatrixProps) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="font-bold">Asset</TableHead>
+                <TableHead className="font-bold">{t('headers.asset')}</TableHead>
                 {tickers.map((ticker) => (
                   <TableHead key={ticker} className="text-center font-bold min-w-[80px]">
                     {ticker}
@@ -71,31 +74,31 @@ export function CorrelationMatrix({ matrix, tickers }: CorrelationMatrixProps) {
         </div>
 
         <div className="mt-4 p-4 bg-muted/50 rounded-lg space-y-2">
-          <div className="text-sm font-semibold">Color Legend:</div>
+          <div className="text-sm font-semibold">{t('legend.title')}</div>
           <div className="flex flex-wrap gap-4 text-xs">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-blue-200 dark:bg-blue-900 border" />
-              <span>Strong Positive (≥0.7)</span>
+              <span>{t('legend.strongPositive')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-blue-100 dark:bg-blue-950 border" />
-              <span>Moderate Positive (0.4-0.7)</span>
+              <span>{t('legend.moderatePositive')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-white dark:bg-slate-950 border" />
-              <span>Weak/None (-0.1-0.1)</span>
+              <span>{t('legend.weakNone')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-red-100 dark:bg-red-900 border" />
-              <span>Moderate Negative (-0.7--0.4)</span>
+              <span>{t('legend.moderateNegative')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-red-200 dark:bg-red-800 border" />
-              <span>Strong Negative (≤-0.7)</span>
+              <span>{t('legend.strongNegative')}</span>
             </div>
           </div>
           <div className="text-xs text-muted-foreground mt-2">
-            <strong>Note:</strong> Diagonal values are always 1.0 (asset correlated with itself)
+            {t('legend.note')}
           </div>
         </div>
       </CardContent>

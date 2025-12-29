@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useTranslations } from 'next-intl'
 
 interface AssetSelectorProps {
   onCalculate: (tickers: string[], includeUSD: boolean) => void
@@ -14,6 +15,7 @@ interface AssetSelectorProps {
 const DEFAULT_TICKERS = ['VTI', 'VEA', 'VWO', 'SHY', 'BND', 'GSG', 'VNQ']
 
 export function AssetSelector({ onCalculate, isLoading }: AssetSelectorProps) {
+  const t = useTranslations('assetSelector')
   const [tickers, setTickers] = useState<string[]>(DEFAULT_TICKERS)
   const [includeUSD, setIncludeUSD] = useState<boolean>(true)
 
@@ -52,22 +54,22 @@ export function AssetSelector({ onCalculate, isLoading }: AssetSelectorProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Asset Selection</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
         <CardDescription>
-          Enter 7 ETF/stock tickers to analyze with FAA strategy
+          {t('description')}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
           {tickers.map((ticker, index) => (
             <div key={index} className="space-y-2">
-              <Label htmlFor={`ticker-${index}`}>Asset {index + 1}</Label>
+              <Label htmlFor={`ticker-${index}`}>{t('assetLabel', { number: index + 1 })}</Label>
               <Input
                 id={`ticker-${index}`}
                 type="text"
                 value={ticker}
                 onChange={(e) => handleTickerChange(index, e.target.value)}
-                placeholder={`e.g., ${DEFAULT_TICKERS[index]}`}
+                placeholder={t(`placeholder.${index + 1}`)}
                 disabled={isLoading}
                 className="uppercase"
                 maxLength={10}
@@ -86,7 +88,7 @@ export function AssetSelector({ onCalculate, isLoading }: AssetSelectorProps) {
             className="h-4 w-4"
           />
           <Label htmlFor="include-usd" className="cursor-pointer">
-            Include USD (Cash) as 8th asset for comparison
+            {t('includeUSD')}
           </Label>
         </div>
 
@@ -96,7 +98,7 @@ export function AssetSelector({ onCalculate, isLoading }: AssetSelectorProps) {
           className="w-full"
           size="lg"
         >
-          {isLoading ? 'Calculating...' : 'Calculate FAA Scores'}
+          {isLoading ? t('calculating') : t('calculateButton')}
         </Button>
       </CardContent>
     </Card>

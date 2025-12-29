@@ -1,0 +1,110 @@
+{
+  "metadata": {
+    "title": "FAA Stock Selection Calculator",
+    "description": "Flexible Asset Allocation strategy for selecting top-performing assets"
+  },
+  "page": {
+    "title": "FAA Stock Selection Calculator",
+    "description": "Flexible Asset Allocation strategy for selecting top-performing assets"
+  },
+  "assetSelector": {
+    "title": "Asset Selection",
+    "description": "Enter 7 ETF/stock tickers to analyze with FAA strategy",
+    "assetLabel": "Asset {number}",
+    "placeholder": {
+      "1": "e.g., VTI",
+      "2": "e.g., VEA",
+      "3": "e.g., VWO",
+      "4": "e.g., SHY",
+      "5": "e.g., BND",
+      "6": "e.g., GSG",
+      "7": "e.g., VNQ"
+    },
+    "includeUSD": "Include USD (Cash) as 8th asset for comparison",
+    "calculateButton": "Calculate FAA Scores",
+    "calculating": "Calculating...",
+    "errors": {
+      "exactlySevenRequired": "Exactly 7 tickers required",
+      "allTickersRequired": "All 7 tickers must be filled",
+      "fetchFailed": "Failed to fetch data for: {tickers}",
+      "insufficientData": "Insufficient historical data for: {tickers}",
+      "unknownError": "Unknown error occurred"
+    }
+  },
+  "metricsTable": {
+    "title": "Asset Metrics",
+    "headers": {
+      "ticker": "Ticker",
+      "momentum": "Momentum",
+      "volatility": "Volatility",
+      "correlation": "Correlation",
+      "weightedScore": "Weighted Score"
+    }
+  },
+  "correlationMatrix": {
+    "title": "Correlation Matrix",
+    "description": "Pairwise correlation coefficients between assets (daily returns)",
+    "headers": {
+      "asset": "Asset"
+    },
+    "legend": {
+      "title": "Color Legend:",
+      "strongPositive": "Strong Positive (≥0.7)",
+      "moderatePositive": "Moderate Positive (0.4-0.7)",
+      "weakNone": "Weak/None (-0.1-0.1)",
+      "moderateNegative": "Moderate Negative (-0.7--0.4)",
+      "strongNegative": "Strong Negative (≤-0.7)",
+      "note": "Note: Diagonal values are always 1.0 (asset correlated with itself)"
+    }
+  },
+  "selectedAssets": {
+    "title": "Top 3 Selected Assets",
+    "description": "Assets selected based on weighted FAA scores",
+    "score": "Score: {value}",
+    "allocation": "Allocation Strategy: Equal weight distribution across selected assets. Assets with negative momentum are replaced with cash holdings.",
+    "negativeMomentum": {
+      "multiple": "{count} assets have negative momentum and will be allocated to CASH: {tickers}",
+      "single": "One asset has negative momentum and will be allocated to CASH: {ticker}",
+      "all": "All selected assets have negative momentum and are allocated to CASH. No stock purchases needed."
+    },
+    "emptyState": "Enter 7 ETF/stock tickers above and click Calculate to get started"
+  },
+  "purchaseCalculator": {
+    "title": "Purchase Calculator",
+    "description": "Calculate how many shares you can buy with your investment amount",
+    "currency": "Currency",
+    "usd": "USD",
+    "krw": "KRW",
+    "investmentAmount": "Investment Amount",
+    "placeholderUSD": "10000",
+    "placeholderKRW": "13500000",
+    "calculateButton": "Calculate",
+    "calculating": "Calculating...",
+    "exchangeRate": "Exchange Rate: 1 USD = {rate} KRW",
+    "updated": "Updated: {date}",
+    "originalAmount": "Original Amount: ₩{krw} KRW = ${usd} USD",
+    "headers": {
+      "asset": "Asset",
+      "currentPrice": "Current Price",
+      "shares": "Shares",
+      "usdAmount": "USD Amount",
+      "percentage": "%",
+      "total": "Total"
+    },
+    "errors": {
+      "atLeastOneTicker": "At least one ticker required",
+      "noPriceData": "No price data available",
+      "fetchFailed": "Failed to fetch quotes for all tickers"
+    }
+  },
+  "api": {
+    "errors": {
+      "exchangeRate": {
+        "apiError": "Exchange rate API error: {status}",
+        "krwNotFound": "KRW rate not found in response",
+        "fetchFailed": "Failed to fetch exchange rate",
+        "internalError": "Internal server error"
+      }
+    }
+  }
+}
