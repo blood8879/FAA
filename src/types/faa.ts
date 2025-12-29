@@ -5,6 +5,10 @@ export interface AssetMetrics {
   volatility: number
   correlation: number
   weightedScore: number
+  // Rank fields (1 = best)
+  momentumRank?: number
+  volatilityRank?: number
+  correlationRank?: number
 }
 
 // Selected asset with allocation decision

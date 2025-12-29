@@ -46,13 +46,14 @@ export function calculateCorrelation(
 }
 
 /**
- * Calculate average correlation of one asset with all other assets
+ * Calculate sum of correlations of one asset with all other assets
+ * (FAA strategy uses sum, not average)
  *
  * @param assetIndex - Index of the asset to analyze
  * @param allReturns - Array of return arrays for all assets
- * @returns Average correlation with other assets
+ * @returns Sum of correlations with other assets
  */
-export function calculateAverageCorrelation(
+export function calculateSumCorrelation(
   assetIndex: number,
   allReturns: number[][]
 ): number {
@@ -78,5 +79,6 @@ export function calculateAverageCorrelation(
     return 0
   }
 
-  return correlations.reduce((sum, c) => sum + c, 0) / correlations.length
+  // Return SUM of correlations, not average (FAA strategy requirement)
+  return correlations.reduce((sum, c) => sum + c, 0)
 }
