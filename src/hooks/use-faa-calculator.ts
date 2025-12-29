@@ -4,12 +4,9 @@ import { useState, useCallback, useMemo } from 'react'
 import { fetchHistoricalData } from '@/lib/api-client/stock-data'
 import { calculateMomentum } from '@/lib/calculations/momentum'
 import { calculateVolatility, calculateDailyReturns } from '@/lib/calculations/volatility'
-import { calculateAverageCorrelation } from '@/lib/calculations/correlation'
+import { calculateSumCorrelation } from '@/lib/calculations/correlation'
 import { calculateCorrelationMatrix } from '@/lib/calculations/correlation-matrix'
-import {
-  calculateWeightedScore,
-  selectTopAssets,
-} from '@/lib/calculations/weighted-score'
+import { selectTopAssets } from '@/lib/calculations/weighted-score'
 import type { AssetMetrics, SelectedAsset } from '@/types/faa'
 import type { HistoricalDataResponse } from '@/types/api'
 
@@ -101,15 +98,14 @@ export function useFAACalculator(): UseFAACalculatorReturn {
       const calculatedMetrics: AssetMetrics[] = historicalData.map((d, index) => {
         const momentum = calculateMomentum(d.data!)
         const volatility = calculateVolatility(d.data!)
-        const correlation = calculateAverageCorrelation(index, allDailyReturns)
-        const weightedScore = calculateWeightedScore(momentum, volatility, correlation)
+        const correlation = calculateSumCorrelation(index, allDailyReturns)
 
         return {
           ticker: d.ticker,
           momentum,
           volatility,
           correlation,
-          weightedScore,
+          weightedScore: 0, // Will be calculated in selectTopAssets using rank-based scoring
         }
       })
 
@@ -119,14 +115,9 @@ export function useFAACalculator(): UseFAACalculatorReturn {
           ticker: 'USD',
           momentum: 0,
           volatility: 0,
-          correlation: calculateAverageCorrelation(allDailyReturns.length - 1, allDailyReturns),
-          weightedScore: 0, // Will be recalculated
+          correlation: calculateSumCorrelation(allDailyReturns.length - 1, allDailyReturns),
+          weightedScore: 0, // Will be calculated in selectTopAssets using rank-based scoring
         }
-        usdMetrics.weightedScore = calculateWeightedScore(
-          usdMetrics.momentum,
-          usdMetrics.volatility,
-          usdMetrics.correlation
-        )
         calculatedMetrics.push(usdMetrics)
       }
 

@@ -32,13 +32,21 @@
     }
   },
   "metricsTable": {
-    "title": "Asset Metrics",
+    "title": "Asset Metrics & Rankings",
     "headers": {
       "ticker": "Ticker",
       "momentum": "Momentum",
       "volatility": "Volatility",
-      "correlation": "Correlation",
-      "weightedScore": "Weighted Score"
+      "correlation": "Correlation (Sum)",
+      "rank": "Rank",
+      "totalScore": "Total Score"
+    },
+    "footer": {
+      "rankingLogic": "Ranking Logic:",
+      "rankingLogicDescription": "Momentum (higher is better, rank 1 = highest), Volatility & Correlation (lower is better, rank 1 = lowest)",
+      "totalScore": "Total Score:",
+      "totalScoreFormula": "(Momentum Rank × 1.0) + (Volatility Rank × 0.5) + (Correlation Rank × 0.5) — Lower score = better",
+      "topThreeHighlighted": "Top 3 assets highlighted"
     }
   },
   "correlationMatrix": {

@@ -31,9 +31,9 @@ export function MetricsTable({ metrics }: MetricsTableProps) {
     return null
   }
 
-  // Sort by weighted score (descending) for display
+  // Sort by weighted score (ascending - lower is better in rank-based scoring)
   const sortedMetrics = [...metrics].sort(
-    (a, b) => b.weightedScore - a.weightedScore
+    (a, b) => a.weightedScore - b.weightedScore
   )
 
   return (
@@ -48,16 +48,19 @@ export function MetricsTable({ metrics }: MetricsTableProps) {
               <TableRow>
                 <TableHead>{t('headers.ticker')}</TableHead>
                 <TableHead className="text-right">{t('headers.momentum')}</TableHead>
+                <TableHead className="text-right">{t('headers.rank')}</TableHead>
                 <TableHead className="text-right">{t('headers.volatility')}</TableHead>
+                <TableHead className="text-right">{t('headers.rank')}</TableHead>
                 <TableHead className="text-right">{t('headers.correlation')}</TableHead>
+                <TableHead className="text-right">{t('headers.rank')}</TableHead>
                 <TableHead className="text-right font-semibold">
-                  {t('headers.weightedScore')}
+                  {t('headers.totalScore')}
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {sortedMetrics.map((metric, index) => (
-                <TableRow key={metric.ticker}>
+                <TableRow key={metric.ticker} className={index < 3 ? 'bg-green-50 dark:bg-green-950' : ''}>
                   <TableCell className="font-medium">{metric.ticker}</TableCell>
                   <TableCell
                     className={`text-right ${
@@ -66,11 +69,20 @@ export function MetricsTable({ metrics }: MetricsTableProps) {
                   >
                     {formatPercentage(metric.momentum)}
                   </TableCell>
+                  <TableCell className="text-right text-xs text-muted-foreground">
+                    {metric.momentumRank || '-'}
+                  </TableCell>
                   <TableCell className="text-right">
                     {formatNumber(metric.volatility)}
                   </TableCell>
+                  <TableCell className="text-right text-xs text-muted-foreground">
+                    {metric.volatilityRank || '-'}
+                  </TableCell>
                   <TableCell className="text-right">
                     {formatNumber(metric.correlation)}
+                  </TableCell>
+                  <TableCell className="text-right text-xs text-muted-foreground">
+                    {metric.correlationRank || '-'}
                   </TableCell>
                   <TableCell className="text-right font-semibold">
                     {formatNumber(metric.weightedScore)}
@@ -79,6 +91,11 @@ export function MetricsTable({ metrics }: MetricsTableProps) {
               ))}
             </TableBody>
           </Table>
+        </div>
+        <div className="mt-4 text-sm text-muted-foreground">
+          <p><strong>{t('footer.rankingLogic')}</strong> {t('footer.rankingLogicDescription')}</p>
+          <p><strong>{t('footer.totalScore')}</strong> {t('footer.totalScoreFormula')}</p>
+          <p className="mt-2 text-green-600"><strong>{t('footer.topThreeHighlighted')}</strong></p>
         </div>
       </CardContent>
     </Card>

@@ -32,13 +32,21 @@
     }
   },
   "metricsTable": {
-    "title": "자산 지표",
+    "title": "자산 지표 & 순위",
     "headers": {
       "ticker": "티커",
       "momentum": "모멘텀",
       "volatility": "변동성",
-      "correlation": "상관관계",
-      "weightedScore": "가중 점수"
+      "correlation": "상관성 (합계)",
+      "rank": "순위",
+      "totalScore": "총 점수"
+    },
+    "footer": {
+      "rankingLogic": "순위 로직:",
+      "rankingLogicDescription": "모멘텀 (높을수록 좋음, 순위 1 = 최고), 변동성 & 상관성 (낮을수록 좋음, 순위 1 = 최저)",
+      "totalScore": "총 점수:",
+      "totalScoreFormula": "(모멘텀 순위 × 1.0) + (변동성 순위 × 0.5) + (상관성 순위 × 0.5) — 낮은 점수 = 우수",
+      "topThreeHighlighted": "상위 3개 자산 강조됨"
     }
   },
   "correlationMatrix": {
