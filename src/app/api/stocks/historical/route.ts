@@ -24,41 +24,47 @@ export async function POST(request: Request) {
     const startDate = new Date()
     startDate.setMonth(startDate.getMonth() - 4)
 
-    // Fetch historical data for all tickers
-    const results: HistoricalDataResponse[] = await Promise.all(
-      tickers.map(async (ticker: string) => {
-        try {
-          const data = await yahooFinance.historical(ticker, {
-            period1: startDate,
-            period2: endDate,
-            interval: '1d',
-          }) as any[]
+    // Helper function to add delay
+    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-          // Transform data to match our interface
-          const transformedData = data.map((d: any) => ({
-            date: d.date,
-            open: d.open,
-            high: d.high,
-            low: d.low,
-            close: d.close,
-            volume: d.volume,
-          }))
+    // Fetch historical data sequentially with delay to avoid rate limiting
+    const results: HistoricalDataResponse[] = []
 
-          return {
-            ticker,
-            data: transformedData,
-            error: null,
-          }
-        } catch (error) {
-          console.error(`Error fetching data for ${ticker}:`, error)
-          return {
-            ticker,
-            data: null,
-            error: error instanceof Error ? error.message : 'Unknown error',
-          }
-        }
-      })
-    )
+    for (const ticker of tickers) {
+      try {
+        const data = await yahooFinance.historical(ticker, {
+          period1: startDate,
+          period2: endDate,
+          interval: '1d',
+        }) as any[]
+
+        // Transform data to match our interface
+        const transformedData = data.map((d: any) => ({
+          date: d.date,
+          open: d.open,
+          high: d.high,
+          low: d.low,
+          close: d.close,
+          volume: d.volume,
+        }))
+
+        results.push({
+          ticker,
+          data: transformedData,
+          error: null,
+        })
+      } catch (error) {
+        console.error(`Error fetching data for ${ticker}:`, error)
+        results.push({
+          ticker,
+          data: null,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        })
+      }
+
+      // Add 500ms delay between requests to avoid rate limiting
+      await delay(500)
+    }
 
     // Check if all requests failed
     const allFailed = results.every((r) => r.error !== null)
