@@ -2,20 +2,28 @@
 
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { useTranslations } from 'next-intl'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { useTranslations, useLocale } from 'next-intl'
+import { ETF_LIST, DEFAULT_TICKERS } from '@/data/etf-list'
 
 interface AssetSelectorProps {
   onCalculate: (tickers: string[], includeUSD: boolean) => void
   isLoading: boolean
 }
 
-const DEFAULT_TICKERS = ['VTI', 'VEA', 'VWO', 'SHY', 'BND', 'GSG', 'VNQ']
-
 export function AssetSelector({ onCalculate, isLoading }: AssetSelectorProps) {
   const t = useTranslations('assetSelector')
+  const locale = useLocale()
   const [tickers, setTickers] = useState<string[]>(DEFAULT_TICKERS)
   const [includeUSD, setIncludeUSD] = useState<boolean>(true)
 
@@ -41,7 +49,7 @@ export function AssetSelector({ onCalculate, isLoading }: AssetSelectorProps) {
 
   const handleTickerChange = (index: number, value: string) => {
     const newTickers = [...tickers]
-    newTickers[index] = value.toUpperCase().trim()
+    newTickers[index] = value
     setTickers(newTickers)
   }
 
@@ -64,18 +72,58 @@ export function AssetSelector({ onCalculate, isLoading }: AssetSelectorProps) {
           {tickers.map((ticker, index) => (
             <div key={index} className="space-y-2">
               <Label htmlFor={`ticker-${index}`}>{t('assetLabel', { number: index + 1 })}</Label>
-              <Input
-                id={`ticker-${index}`}
-                type="text"
+              <Select
                 value={ticker}
-                onChange={(e) => handleTickerChange(index, e.target.value)}
-                placeholder={t(`placeholder.${index + 1}`)}
+                onValueChange={(value) => handleTickerChange(index, value)}
                 disabled={isLoading}
-                className="uppercase"
-                maxLength={10}
-              />
+              >
+                <SelectTrigger id={`ticker-${index}`}>
+                  <SelectValue placeholder={t(`placeholder.${index + 1}`)} />
+                </SelectTrigger>
+                <SelectContent className="max-h-[400px]">
+                  {ETF_LIST.map((group) => (
+                    <SelectGroup key={group.label}>
+                      <SelectLabel className="font-bold text-sm">
+                        {locale === 'ko' ? group.labelKo : group.label}
+                      </SelectLabel>
+                      {group.categories.map((category) => (
+                        <div key={category.label}>
+                          <SelectLabel className="pl-2 text-xs text-muted-foreground">
+                            {locale === 'ko' ? category.labelKo : category.label}
+                          </SelectLabel>
+                          {category.etfs.map((etf) => (
+                            <SelectItem
+                              key={etf.ticker}
+                              value={etf.ticker}
+                              className="pl-4"
+                            >
+                              <div className="flex flex-col">
+                                <div className="font-medium">
+                                  {etf.ticker} - {locale === 'ko' ? etf.nameKo : etf.name}
+                                </div>
+                                <div className="text-xs text-muted-foreground">
+                                  {locale === 'ko' ? etf.descriptionKo : etf.description}
+                                </div>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </div>
+                      ))}
+                    </SelectGroup>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           ))}
+        </div>
+
+        <div className="mb-6 p-4 border rounded-lg bg-muted/50">
+          <div className="text-sm font-semibold mb-2">{t('guide.title')}</div>
+          <div className="text-xs text-muted-foreground space-y-1">
+            <div>• {t('guide.equity')}: 3{t('guide.items')}</div>
+            <div>• {t('guide.bond')}: 2{t('guide.items')}</div>
+            <div>• {t('guide.alternative')}: 2{t('guide.items')}</div>
+          </div>
         </div>
 
         <div className="mb-6 flex items-center space-x-2 p-4 border rounded-lg bg-muted/50">
